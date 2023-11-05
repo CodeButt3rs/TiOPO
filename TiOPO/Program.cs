@@ -1,5 +1,6 @@
-﻿using NUnit.Framework;
-namespace TiOPONameSpace
+﻿using System;
+using NUnit.Framework;
+namespace TiOPO
 {
     [TestFixture]
     public class TestingClass
@@ -12,6 +13,13 @@ namespace TiOPONameSpace
         public void BubbleSort_Tests(int[] input, int[] result)
         {
             Assert.AreEqual(result, FuncClass.BubbleSort(input));
+        }
+        [Author("Лесовой В.Р.")]
+        [Category("Сортировка")]
+        [Test]
+        public void BubbleSort_Exception_Tests()
+        {
+            Assert.Throws<ArrayLength>(() => FuncClass.BubbleSort(new int[0]));
         }
         //
         [Author("Лесовой В.Р.")]
@@ -35,6 +43,16 @@ namespace TiOPONameSpace
         }
         //
         [Author("Лесовой В.Р.")]
+        [Category("Факториал")]
+        [Test]
+        public void Factorial_Exception_Tests()
+        {
+            Assert.Throws<OutOfRange>(() => FuncClass.Factorial(13));
+            Assert.Throws<OutOfRange>(() => FuncClass.Factorial(-1));
+            Assert.Throws<OutOfRange>(() => FuncClass.Factorial(56));
+        }
+        //
+        [Author("Лесовой В.Р.")]
         [Category("Числа Фибоначчи")]
         [TestCase(1, 0)]
         [TestCase(2, 1)]
@@ -44,6 +62,16 @@ namespace TiOPONameSpace
         public void Fibonacci_Tests(int num, int result)
         {
             Assert.AreEqual(result, FuncClass.Fibonacci(num));
+        }
+        //
+        [Author("Лесовой В.Р.")]
+        [Category("Числа Фибоначчи")]
+        [Test]
+        public void Fibonacci_Exception_Tests()
+        {
+            Assert.Throws<OutOfRange>(() => FuncClass.Fibonacci(48));
+            Assert.Throws<OutOfRange>(() => FuncClass.Fibonacci(-50));
+            Assert.Throws<OutOfRange>(() => FuncClass.Fibonacci(10000));
         }
         //
         [Author("Лесовой В.Р.")]
@@ -77,6 +105,7 @@ namespace TiOPONameSpace
     {
         public static int[] BubbleSort(int[] array)
         {
+            if (array.Length < 1) throw new ArrayLength();
             int[] arr = array;
             int n = arr.Length;
             for (int i = 0; i < n; i++)
@@ -102,15 +131,13 @@ namespace TiOPONameSpace
         }
         public static int Factorial(int num)
         {
-            if (num <= 0) num = 1;
-            if (num > 12) num = 12;
+            if (num <= 0 || num > 12) throw new OutOfRange();
             if (num == 1) return 1;
             return num * Factorial(num - 1);
         }
         public static uint Fibonacci(int pos)
         {
-            if (pos > 47) pos = 47;
-            if (pos < 1) pos = 1;
+            if (pos < 1 || pos > 47) throw new OutOfRange();
             uint result = 0;
             uint b = 1;
             uint tmp;
