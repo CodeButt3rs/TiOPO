@@ -101,6 +101,133 @@ namespace TiOPO
             Assert.AreEqual(result, FuncClass.Prime(num));
         }
     }
+    public class TaylorTest
+    {
+        [Author("Лесовой В.Р.")]
+        [Category("Синус Тейлор")]
+        [TestCase(0.5)]
+        [TestCase(-0.5)]
+        [TestCase(0)]
+        [TestCase(1)]
+        public void Taylor_Sin_Tests(double num)
+        {
+            Assert.AreEqual(Math.Sin(num), Taylor.Sin(num));
+        }
+        //
+        [Author("Лесовой В.Р.")]
+        [Category("Косинус Тейлор")]
+        [TestCase(0.5)]
+        [TestCase(-0.5)]
+        [TestCase(0)]
+        [TestCase(1)]
+        public void Taylor_Cos_Tests(double num)
+        {
+            Assert.That(Math.Cos(num), Is.EqualTo(Taylor.Cos(num)).Within(2));
+        }
+        //
+        [Author("Лесовой В.Р.")]
+        [Category("Степень Тейлор")]
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(2)]
+        public void Taylor_Pow_Tests(int num)
+        {
+            Assert.AreEqual(Math.Pow(num, 5), Taylor.Power(num, 5));
+        }
+        //
+        [Author("Лесовой В.Р.")]
+        [Category("Экспонента Тейлор")]
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(2)]
+        public void Taylor_Exp_Tests(int num)
+        {
+            Assert.That(Math.Exp(num), Is.EqualTo(Taylor.Exp(num)).Within(4));
+        }
+        //
+        [Author("Лесовой В.Р.")]
+        [Category("Факториал Тейлор")]
+        [TestCase(4)]
+        [TestCase(1)]
+        [TestCase(2)]
+        [TestCase(10)]
+        public void Taylor_Fact_Tests(int num)
+        {
+            Assert.AreEqual(FuncClass.Factorial(num), Taylor.Factorial(num));
+        }
+        //
+        [Author("Лесовой В.Р.")]
+        [Category("Логарифм Тейлор")]
+        [TestCase(0.5f, 0.81093f)]
+        [TestCase(1f, 0f)]
+        [TestCase(-0.9f, 1.03318f)]
+        public void Taylor_Log_Tests(float num, float res)
+        {
+            Assert.That(res, Is.EqualTo(Taylor.LnPlus(num)).Within(4));
+        }
+        //
+        [Author("Лесовой В.Р.")]
+        [Category("Логарифм Тейлор")]
+        [TestCase(2d)]
+        [TestCase(1d)]
+        [TestCase(-1d)]
+        public void Taylor_Log_Exception_Tests(double num)
+        {
+            Assert.Throws<OutOfRange>(delegate { double v = Taylor.LnPlus(Taylor.Power(num, 2) + 1); });
+        }
+        [Author("Лесовой В.Р.")]
+        [Category("Интеграция Тейлор")]
+        [TestCase(1d, 7.3890d + -0.9899d)]
+        [TestCase(2d, 54.5981d + -0.6536d)]
+        public void Taylor_Exp_Plus_Cos_Tests(double num, double res)
+        {
+            Assert.That(
+                res, 
+                Is.EqualTo(Taylor.Exp(2 * num) + Taylor.Cos(3 * 1)).Within(4)
+                );
+        }
+        [Author("Лесовой В.Р.")]
+        [Category("Интеграция Тейлор")]
+        [TestCase(-1d, 0.7080d / (0.1353 + -0.9899d))]
+        [TestCase(-2d, 0.8268d / (0.0183d + 0.9601d))]
+        public void Taylor_Sin_Square_Divided_By_Exp_Plus_Cos_Tests(double num, double res)
+        {
+            Assert.That(
+                res,
+                Is.EqualTo(Taylor.Power(Taylor.Sin(num), 2) / (Taylor.Exp(2 * num) + Taylor.Cos(3 * 1))).Within(4)
+                );
+        }
+        [Author("Лесовой В.Р.")]
+        [Category("Интеграция Тейлор")]
+        [TestCase(0d, 0 + 1 - 1.7917d)]
+        public void Taylor_Sqrt_Minus_Ln_Plus_One_Tests(double num, double res)
+        {
+            Assert.That(
+                res,
+                Is.EqualTo(num + 1 - Taylor.LnPlus(Taylor.Power(num, 2) + 1)).Within(4)
+                );
+        }
+        [Author("Лесовой В.Р.")]
+        [Category("Интеграция Тейлор")]
+        [TestCase(1d)]
+        [TestCase(-1d)]
+        public void Taylor_Sqrt_Minus_Ln_Plus_One_Ln_Out_Of_Range_Exception_Tests(double num)
+        {
+            Assert.Throws<OutOfRange>(delegate { double v = num + 1 - Taylor.LnPlus(Taylor.Power(num, 2) + 1); });
+        }
+        [Author("Лесовой В.Р.")]
+        [Category("Интеграция Тейлор")]
+        [TestCase(-1d, -0.828457d)]
+        [TestCase(-2d, 0.84505d)]
+        [TestCase(0d, -0.7917d)]
+        public void Taylor_Func_Tests(double num, double res)
+        {
+            Assert.That(
+                res,
+                Is.EqualTo(FuncClass.Func(num)).Within(4)
+                );
+        }
+    }
     public class FuncClass
     {
         public static int[] BubbleSort(int[] array)
@@ -161,6 +288,11 @@ namespace TiOPO
                     return false;
             }
             return true;
+        }
+        public static double Func(double x)
+        {
+            if (x < 0) return Taylor.Power(Taylor.Sin(x), 2) / (Taylor.Exp(2 * x) + Taylor.Cos(3 * x));
+            return x - Taylor.LnPlus(Taylor.Power(x, 2));
         }
     }
 }
