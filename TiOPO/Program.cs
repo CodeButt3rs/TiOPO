@@ -204,7 +204,7 @@ namespace TiOPO
         {
             Assert.That(
                 res,
-                Is.EqualTo(num + 1 - Taylor.LnPlus(Taylor.Power(num, 2) + 1)).Within(4)
+                Is.EqualTo(num + 1 - Taylor.LnPlus(Taylor.Power(num, 3) + 1)).Within(4)
                 );
         }
         [Author("Лесовой В.Р.")]
