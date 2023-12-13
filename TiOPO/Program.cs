@@ -153,7 +153,7 @@ namespace TiOPO
         [TestCase(10)]
         public void Taylor_Fact_Tests(int num)
         {
-            Assert.AreEqual(FuncClass.Factorial(num + 1), Taylor.Factorial(num));
+            Assert.AreEqual(FuncClass.Factorial(num), Taylor.Factorial(num));
         }
         //
         [Author("Лесовой В.Р.")]
