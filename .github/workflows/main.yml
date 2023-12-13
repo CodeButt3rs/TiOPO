@@ -1,0 +1,12 @@
+name: .Net Ubuntu server
+on: [push]
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/Checkout@v3
+      - name: Install .Net
+        uses: actions/setup-dotnet@v3
+      - name: Run Tests
+        run: dotnet test
